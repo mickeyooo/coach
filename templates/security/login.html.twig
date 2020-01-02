@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}登录 {{ parent() }}{% endblock %}
+{% block body %}
+    <body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">G+</h1>
+            </div>
+            <h3>高尔夫教练平台</h3>
+            <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+            </p>
+            <p>Login in. To see it in action.</p>
+            <form class="m-t" id="login_form" role="form" method="post" novalidate="novalidate">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <input type="text" value="{{ last_username }}" placeholder="手机号" name="mobile" id="inputMobile"
+                           class="form-control" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="密码" id="inputPassword" class="form-control"
+                           required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <button type="submit" class="btn btn-primary block full-width m-b">登录</button>
+
+                <a href="#">
+                    <small>忘记密码？</small>
+                </a>
+            </form>
+            <p class="m-t">
+                <small>高尔夫杂志 &copy;2019</small>
+            </p>
+        </div>
+    </div>
+
+    {{ encore_entry_script_tags('login') }}
+    </body>
+{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('bootstrap') }}
+    {{ encore_entry_link_tags('animate') }}
+    {{ encore_entry_link_tags('admin') }}
+{% endblock %}

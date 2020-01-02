@@ -1,0 +1,22 @@
+App\Entity\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [mobile]
+              message: '此手机号已经被注册'
+    properties:
+        mobile:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^1\d{10}$/'
+                message: 您输入的手机号无效
+        roles:
+            - Choice:
+                choices: ['ROLE_USER', 'ROLE_ADMIN']
+                min: 1
+                minMessage: '请至少选择一个角色'
+                multiple: true
+        password:
+            - NotBlank: ~
+            - Length:
+                min: 6
+                minMessage: '密码最短不能少于 {{ limit }} 字符'

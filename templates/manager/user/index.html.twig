@@ -1,0 +1,37 @@
+{% extends 'manager/layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block wrappers %}
+    {{ include ('manager/breadcrumb.html.twig') }}
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox-content">
+                    <a href="{{ path('app_manager_user_create') }}" class="btn btn-primary">新建</a>
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>昵称</th>
+                            <th>手机号</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in list %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td></td>
+                                <td>{{ item.mobile }}</td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

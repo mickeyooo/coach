@@ -1,0 +1,108 @@
+{% extends 'manager/layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block wrappers %}
+    {{ include ('manager/breadcrumb.html.twig') }}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox-content">
+                    {{ form_start(form, {'attr': {'id': 'user_form', 'novalidate': 'novalidate'}}) }}
+                    <div>
+                        {{ form_errors(form) }}
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">昵称</label>
+                        <div class="col-lg-10">
+                            {{ form_widget(form.nickname, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">手机号</label>
+                        <div class="col-lg-10">
+                            {{ form_widget(form.mobile, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.mobile) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">角色</label>
+                        <div class="col-lg-10">
+                            {{ form_widget(form.roles) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">密码</label>
+                        <div class="col-lg-10">
+                            {{ form_widget(form.password.first, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-2 col-form-label">确认密码</label>
+                        <div class="col-lg-10">
+                            {{ form_widget(form.password.second, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-10 offset-lg-2">
+                            <input type="submit" class="btn btn-primary" content="提交">
+                        </div>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('icheck') }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('icheck') }}
+    {{ encore_entry_script_tags('bootstrapValidator') }}
+    <script>
+        $(function () {
+            $('.form-check').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+            $('#user_form').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    'user[mobile]': {
+                        validators: {
+                            notEmpty: {message: '手机号不能为空'},
+                            regexp: {regexp: /^1\d{10}$/, message: '您输入的手机号无效'},
+                            remote: {
+                                url: '{{ path("api_mobile_validations_get_item", {"id": "_mobile"}) }}'.replace('_mobile', $('#user_mobile').val()),
+                                message: '手机号已使用'
+                            }
+                        }
+                    },
+                    'user[roles][]': {
+                        validators: {
+                            // choice: {min: 1, message: '至少选择一个角色'}
+                        }
+                    },
+                    'user[password][first]': {
+                        validators: {
+                            notEmpty: {message: '密码不能为空'},
+                            stringLength: {min: 6, messages: '密码长度不能少于6个字符'}
+                        }
+                    },
+                    'user[password][second]': {
+                        validators: {
+                            identical: {field: 'user[password][first]', message: '您两次输入密码不一致'}
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
